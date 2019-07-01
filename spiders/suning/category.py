@@ -34,9 +34,8 @@ class CategorySpider(object):
     def next_request(self):
         while True:
             url = redis_conn.lpop(self.queue_key)
-            print('下个爬取地址检索中: %s' % url)
+            print('下个爬取地址检索中: %s , 时间: %s' % (url, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
             if url is not None:
-                print(url)
                 print(url)
                 yield url
             time.sleep(1)
@@ -60,6 +59,11 @@ class CategorySpider(object):
         cursor.execute(sql, (item['category_id'], item['category_name']))
         connect.commit()
 
+    # 添加下一个请求地址
+    def add_next_request(self, url, queueKey = queue_key ):
+        print(url)
+        redis_conn.lpush(queueKey, url)
+
     # 解析请求返回值
     def parse(self, response):
         print('parse response')
@@ -78,6 +82,8 @@ class CategorySpider(object):
                 Item['category_id'] = self.jiequ(href)
                 Item['category_name'] = title
                 yield Item
+
+                self.add_next_request(href[0], 'productListQueue')
 
     # 截取出分类id
     def jiequ(self, href):

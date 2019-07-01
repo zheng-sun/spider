@@ -7,7 +7,7 @@ redis_conn = redis.Redis()
 
 class GoodListSpider(object):
     name = 'suning.good_list'
-    queue_key = 'good_list_queue_list'
+    queue_key = 'productListQueue'
 
     # 开启爬虫
     def start(self):
@@ -19,9 +19,8 @@ class GoodListSpider(object):
     def next_request(self):
         while True:
             url = redis_conn.lpop(self.queue_key)
-            print('下个爬取地址检索中: %s' % url)
+            print('下个爬取地址检索中: %s , 时间: %s' % (url, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
             if url is not None:
-                print(url)
                 print(url)
                 yield url
             time.sleep(1)
