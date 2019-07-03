@@ -1,6 +1,8 @@
 from spider_lib.redis_connect import SpiderRedis
+from spider_lib.mysql import SpiderMysql
 import json
 from spiders.suning.category import CategorySpider
+
 
 # 检测是否存在下一个爬取任务
 def next_task():
@@ -20,11 +22,11 @@ def add_next_task():
 # 启动应用
 def execute():
     #add_next_task()
-    # for task in next_task():
-    #     project = task['project']
-    #     spider = task['spider']
-    #     url = task['url']
-    CategorySpider().start()
+    for task in next_task():
+    # #     project = task['project']
+    # #     spider = task['spider']
+    # #     url = task['url']
+        CategorySpider().start(url=task['url'])
 
 if __name__ == '__main__':
     execute()
