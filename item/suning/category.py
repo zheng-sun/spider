@@ -1,3 +1,4 @@
-class SuningCategoryItem(object):
-    category_id = ''
-    category_name = ''
+
+
+class SuningCategoryItem(dict):
+    pass
